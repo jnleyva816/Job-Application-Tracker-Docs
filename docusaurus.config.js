@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Job Application Tracker',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'Track your job applications, interviews, and offers! 📝',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -134,7 +134,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/jnleyva816/Job-Application-Tracker',
               },
             ],
           },
