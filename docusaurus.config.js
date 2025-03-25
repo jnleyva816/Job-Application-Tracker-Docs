@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'Job Application Tracker',
-  tagline: 'Track your job applications, interviews, and offers! 📝',
+  title: 'Job Application Tracker API',
+  tagline: 'API Documentation for Job Application Tracker',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -22,10 +22,10 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'jnleyva816',
+  projectName: 'Job-Application-Tracker',
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'warn',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -46,23 +46,9 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/jnleyva816/Job-Application-Tracker/tree/main/Job_Application_Tracker_Docs/',
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -76,9 +62,9 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'My Site',
+        title: 'Job Application Tracker API',
         logo: {
-          alt: 'My Site Logo',
+          alt: 'Job Application Tracker Logo',
           src: 'img/logo.svg',
         },
         items: [
@@ -86,11 +72,10 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Documentation',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/jnleyva816/Job-Application-Tracker',
             label: 'GitHub',
             position: 'right',
           },
@@ -100,28 +85,27 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Documentation',
             items: [
               {
-                label: 'Tutorial',
+                label: 'Getting Started',
                 to: '/docs/intro',
               },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'User API',
+                to: '/docs/API-Reference/user-api',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Applications API',
+                to: '/docs/API-Reference/applications-api',
               },
               {
-                label: 'X',
-                href: 'https://x.com/docusaurus',
+                label: 'Interviews API',
+                to: '/docs/API-Reference/interviews-api',
+              },
+              {
+                label: 'Contacts API',
+                to: '/docs/API-Reference/contacts-api',
               },
             ],
           },
@@ -129,17 +113,13 @@ const config = {
             title: 'More',
             items: [
               {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
                 label: 'GitHub',
                 href: 'https://github.com/jnleyva816/Job-Application-Tracker',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Job Application Tracker. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
