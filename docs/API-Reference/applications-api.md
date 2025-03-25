@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# JobTracker Application Controller Documentation
+# Application API Reference 
 
 This document describes how to use the Application API endpoints in the JobTracker backend.
 

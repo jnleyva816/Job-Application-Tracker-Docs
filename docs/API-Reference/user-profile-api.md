@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# JobTracker User Profile Controller Documentation
+# User Profile API Reference 
 
 This document provides information on how to use the User Profile API endpoints of the JobTracker backend.
 

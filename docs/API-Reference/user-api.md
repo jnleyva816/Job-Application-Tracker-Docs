@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# JobTracker Backend User Documentation
+# User API Reference 
 
 This document provides information on how to use the User API endpoints of the JobTracker backend.
 

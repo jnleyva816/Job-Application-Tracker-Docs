@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# JobTracker Interview Controller Documentation
+# Interview API Reference 
 
 This document provides information on how to use the Interview API endpoints of the JobTracker backend.
 
