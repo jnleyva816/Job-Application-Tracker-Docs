@@ -1,207 +1,151 @@
 ---
-sidebar_position: 3
+sidebar_position: 5
 ---
 
-# Interviews API Reference
+# JobTracker Interview Controller Documentation
 
-This document outlines the available endpoints for managing job interviews in the Job Application Tracker.
+This document provides information on how to use the Interview API endpoints of the JobTracker backend.
 
 ## Base URL
 
-All API endpoints are prefixed with `/api`
+All API endpoints are prefixed with the following base URL:
+```
+http://your-server/api/applications/{applicationId}/interviews
+```
 
 ## Authentication
 
-All endpoints require authentication using a JWT token in the Authorization header:
-```
-Authorization: Bearer <your_jwt_token>
-```
+The API uses standard authentication and authorization mechanisms (e.g., JWT) to secure access to these endpoints. Specific roles or permissions might be required to access certain endpoints. Consult the application's security configuration for details.
 
-## Endpoints
+## API Endpoints
 
-### Create Interview
+### 1. Get All Interviews for an Application
 
-```http
-POST /api/interviews
-```
+**Endpoint:** `GET /`
 
-Create a new interview for a job application.
+**Description:** Retrieves all interviews for a specific application.
 
-#### Request Body
+**Path Variable:**
+- `applicationId`: The ID of the application.
 
+**Authorization:** Requires appropriate permissions to view interviews for the application.
+
+**Response:**
+- **200 OK:** Returns a list of Interview objects.
 ```json
-{
-  "applicationId": "string",
-  "interviewType": "string (PHONE, VIDEO, IN_PERSON, TECHNICAL, BEHAVIORAL, FINAL)",
-  "interviewDate": "string (ISO date)",
-  "interviewTime": "string (ISO time)",
-  "interviewerName": "string",
-  "interviewerEmail": "string",
-  "interviewLocation": "string",
-  "notes": "string",
-  "status": "string (SCHEDULED, COMPLETED, CANCELLED)"
-}
-```
-
-#### Response
-
-- **Success (201 Created)**
-```json
-{
-  "id": "string",
-  "applicationId": "string",
-  "interviewType": "string",
-  "interviewDate": "string",
-  "interviewTime": "string",
-  "interviewerName": "string",
-  "interviewerEmail": "string",
-  "interviewLocation": "string",
-  "notes": "string",
-  "status": "string",
-  "createdAt": "string",
-  "updatedAt": "string"
-}
-```
-
-### Get All Interviews
-
-```http
-GET /api/interviews
-```
-
-Retrieve all interviews for the current user.
-
-#### Query Parameters
-
-- `applicationId` (optional): Filter interviews by application ID
-- `status` (optional): Filter interviews by status
-- `interviewType` (optional): Filter interviews by type
-- `page` (optional): Page number for pagination (default: 0)
-- `size` (optional): Number of items per page (default: 10)
-
-#### Response
-
-- **Success (200 OK)**
-```json
-{
-  "content": [
+[
     {
-      "id": "string",
-      "applicationId": "string",
-      "interviewType": "string",
-      "interviewDate": "string",
-      "interviewTime": "string",
-      "interviewerName": "string",
-      "interviewerEmail": "string",
-      "interviewLocation": "string",
-      "notes": "string",
-      "status": "string",
-      "createdAt": "string",
-      "updatedAt": "string"
-    }
-  ],
-  "totalElements": "number",
-  "totalPages": "number",
-  "currentPage": "number",
-  "size": "number"
-}
+        "id": "integer",
+        "applicationId": "integer",
+        "date": "string",
+        "notes": "string",
+        // ... other interview properties
+    },
+    ...
+]
 ```
 
-### Get Interview by ID
+### 2. Get Interview by ID
 
-```http
-GET /api/interviews/{id}
-```
+**Endpoint:** `GET /{interviewId}`
 
-Retrieve a specific interview by its ID.
+**Description:** Retrieves a specific interview by its ID for a given application.
 
-#### Response
+**Path Variables:**
+- `applicationId`: The ID of the application.
+- `interviewId`: The ID of the interview.
 
-- **Success (200 OK)**
+**Authorization:** Requires appropriate permissions to view the interview for the application.
+
+**Response:**
+- **200 OK:** Returns the Interview object.
 ```json
 {
-  "id": "string",
-  "applicationId": "string",
-  "interviewType": "string",
-  "interviewDate": "string",
-  "interviewTime": "string",
-  "interviewerName": "string",
-  "interviewerEmail": "string",
-  "interviewLocation": "string",
-  "notes": "string",
-  "status": "string",
-  "createdAt": "string",
-  "updatedAt": "string"
+    "id": "integer",
+    "applicationId": "integer",
+    "date": "string",
+    "notes": "string",
+    // ... other interview properties
 }
 ```
+- **404 Not Found:** The interview with the given ID was not found for the application.
 
-### Update Interview
+### 3. Create Interview
 
-```http
-PUT /api/interviews/{id}
-```
+**Endpoint:** `POST /`
 
-Update an existing interview.
+**Description:** Creates a new interview for a specific application.
 
-#### Request Body
+**Path Variable:**
+- `applicationId`: The ID of the application.
 
+**Request Body:** The Interview object to create.
 ```json
 {
-  "interviewType": "string",
-  "interviewDate": "string",
-  "interviewTime": "string",
-  "interviewerName": "string",
-  "interviewerEmail": "string",
-  "interviewLocation": "string",
-  "notes": "string",
-  "status": "string"
+    "date": "string",
+    "notes": "string",
+    // ... other interview properties (excluding id and applicationId)
 }
 ```
 
-#### Response
+**Authorization:** Requires appropriate permissions to create interviews for the application.
 
-- **Success (200 OK)**
+**Response:**
+- **201 Created:** Returns the created Interview object, including the generated ID.
 ```json
 {
-  "id": "string",
-  "applicationId": "string",
-  "interviewType": "string",
-  "interviewDate": "string",
-  "interviewTime": "string",
-  "interviewerName": "string",
-  "interviewerEmail": "string",
-  "interviewLocation": "string",
-  "notes": "string",
-  "status": "string",
-  "updatedAt": "string"
+    "id": "integer",
+    "applicationId": "integer",
+    "date": "string",
+    "notes": "string",
+    // ... other interview properties
 }
 ```
 
-### Delete Interview
+### 4. Update Interview
 
-```http
-DELETE /api/interviews/{id}
-```
+**Endpoint:** `PUT /{interviewId}`
 
-Delete an interview.
+**Description:** Updates an existing interview for a specific application.
 
-#### Response
+**Path Variables:**
+- `applicationId`: The ID of the application.
+- `interviewId`: The ID of the interview to update.
 
-- **Success (200 OK)**
+**Request Body:** The updated Interview object.
 ```json
 {
-  "message": "Interview deleted successfully"
+    "date": "string",
+    "notes": "string",
+    // ... other interview properties
 }
 ```
 
-### Get Upcoming Interviews
+**Authorization:** Requires appropriate permissions to update interviews for the application.
 
-```http
-GET /api/interviews/upcoming
+**Response:**
+- **200 OK:** Returns the updated Interview object.
+```json
+{
+    "id": "integer",
+    "applicationId": "integer",
+    "date": "string",
+    "notes": "string",
+    // ... other interview properties
+}
 ```
 
-Get a list of upcoming interviews for the current user.
+### 5. Delete Interview
 
-#### Query Parameters
+**Endpoint:** `DELETE /{interviewId}`
 
-- `
+**Description:** Deletes an interview for a specific application.
+
+**Path Variables:**
+- `applicationId`: The ID of the application.
+- `interviewId`: The ID of the interview to delete.
+
+**Authorization:** Requires appropriate permissions to delete interviews for the application.
+
+**Response:**
+- **204 No Content:** Indicates successful deletion.

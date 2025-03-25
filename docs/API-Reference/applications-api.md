@@ -1,186 +1,212 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
-# Applications API Reference
+# JobTracker Application Controller Documentation
 
-This document outlines the available endpoints for managing job applications in the Job Application Tracker.
+This document describes how to use the Application API endpoints in the JobTracker backend.
 
 ## Base URL
 
-All API endpoints are prefixed with `/api`
+All API endpoints are prefixed with the following base URL:
+```
+http://your-server/api/applications
+```
 
 ## Authentication
 
-All endpoints require authentication using a JWT token in the Authorization header:
-```
-Authorization: Bearer <your_jwt_token>
-```
+The API uses JWT (JSON Web Token) authentication. The token should be included in the Authorization header of all requests to these endpoints. Additionally, many endpoints enforce authorization based on the user's role (ADMIN) and the ownership of the application being accessed.
 
-## Endpoints
+## API Endpoints
 
-### Create Application
+### 1. Get All Applications
 
-```http
-POST /api/applications
-```
+**Endpoint:** `GET /`
 
-Create a new job application.
+**Description:** Retrieves all job applications.
 
-#### Request Body
+**Authorization:**
+- If the user has the ADMIN role, retrieves all applications.
+- Otherwise, retrieves only the applications associated with the currently authenticated user.
 
+**Response:**
+- **200 OK:** Returns a list of Application objects. The structure of the Application object is shown below.
+- **401 Unauthorized:** If the user is not authenticated.
 ```json
-{
-  "companyName": "string",
-  "positionTitle": "string",
-  "applicationDate": "string (ISO date)",
-  "status": "string (PENDING, INTERVIEW_SCHEDULED, OFFER_RECEIVED, REJECTED, ACCEPTED)",
-  "jobDescription": "string",
-  "applicationUrl": "string",
-  "notes": "string"
-}
-```
-
-#### Response
-
-- **Success (201 Created)**
-```json
-{
-  "id": "string",
-  "companyName": "string",
-  "positionTitle": "string",
-  "applicationDate": "string",
-  "status": "string",
-  "jobDescription": "string",
-  "applicationUrl": "string",
-  "notes": "string",
-  "createdAt": "string",
-  "updatedAt": "string"
-}
-```
-
-### Get All Applications
-
-```http
-GET /api/applications
-```
-
-Retrieve all job applications for the current user.
-
-#### Query Parameters
-
-- `status` (optional): Filter applications by status
-- `companyName` (optional): Filter applications by company name
-- `page` (optional): Page number for pagination (default: 0)
-- `size` (optional): Number of items per page (default: 10)
-
-#### Response
-
-- **Success (200 OK)**
-```json
-{
-  "content": [
+[
     {
-      "id": "string",
-      "companyName": "string",
-      "positionTitle": "string",
-      "applicationDate": "string",
-      "status": "string",
-      "jobDescription": "string",
-      "applicationUrl": "string",
-      "notes": "string",
-      "createdAt": "string",
-      "updatedAt": "string"
+        "id": "integer",
+        "company": "string",
+        "jobTitle": "string",
+        "location": "string",
+        "url": "string",
+        "description": "string",
+        "compensation": "string",
+        "status": "string",
+        "applicationDate": "string",
+        "user": {
+            "id": "integer",
+            "username": "string",
+            // other user properties, but typically not the password
+        }
+        // ... other application properties
+    },
+    ...
+]
+```
+
+### 2. Get Application by ID
+
+**Endpoint:** `GET /{id}`
+
+**Description:** Retrieves a specific job application by its ID.
+
+**Path Variable:**
+- `id`: The ID of the application to retrieve.
+
+**Authorization:**
+- If the user has the ADMIN role, can retrieve any application.
+- Otherwise, can only retrieve applications associated with the currently authenticated user.
+
+**Response:**
+- **200 OK:** Returns the Application object.
+- **401 Unauthorized:** If the user is not authenticated.
+- **403 Forbidden:** If the user is not authorized to access the specified application.
+- **404 Not Found:** If the application with the given ID does not exist.
+```json
+{
+    "id": "integer",
+    "company": "string",
+    "jobTitle": "string",
+    "location": "string",
+    "url": "string",
+    "description": "string",
+    "compensation": "string",
+    "status": "string",
+    "applicationDate": "string",
+    "user": {
+        "id": "integer",
+        "username": "string",
+        // other user properties
     }
-  ],
-  "totalElements": "number",
-  "totalPages": "number",
-  "currentPage": "number",
-  "size": "number"
+    // ... other application properties
 }
 ```
 
-### Get Application by ID
+### 3. Create Application
 
-```http
-GET /api/applications/{id}
-```
+**Endpoint:** `POST /`
 
-Retrieve a specific job application by its ID.
+**Description:** Creates a new job application.
 
-#### Response
-
-- **Success (200 OK)**
+**Request Body:** The Application object to create. The user field in the request body is ignored; the application is automatically associated with the currently authenticated user.
 ```json
 {
-  "id": "string",
-  "companyName": "string",
-  "positionTitle": "string",
-  "applicationDate": "string",
-  "status": "string",
-  "jobDescription": "string",
-  "applicationUrl": "string",
-  "notes": "string",
-  "createdAt": "string",
-  "updatedAt": "string"
+    "company": "string",
+    "jobTitle": "string",
+    "location": "string",
+    "url": "string",
+    "description": "string",
+    "compensation": "string",
+    "status": "string",
+    "applicationDate": "string",
+    // ... other application properties (excluding id and user)
 }
 ```
 
-### Update Application
+**Authorization:** Requires a valid JWT token.
 
-```http
-PUT /api/applications/{id}
-```
-
-Update an existing job application.
-
-#### Request Body
-
+**Response:**
+- **201 Created:** Returns the created Application object, including the generated ID and the user it was assigned to.
 ```json
 {
-  "companyName": "string",
-  "positionTitle": "string",
-  "applicationDate": "string",
-  "status": "string",
-  "jobDescription": "string",
-  "applicationUrl": "string",
-  "notes": "string"
+    "id": "integer",
+    "company": "string",
+    "jobTitle": "string",
+    "location": "string",
+    "url": "string",
+    "description": "string",
+    "compensation": "string",
+    "status": "string",
+    "applicationDate": "string",
+    "user": {
+        "id": "integer",
+        "username": "string",
+    },
+    // ... other application properties
 }
 ```
 
-#### Response
+### 4. Update Application
 
-- **Success (200 OK)**
+**Endpoint:** `PUT /{id}`
+
+**Description:** Updates an existing job application.
+
+**Path Variable:**
+- `id`: The ID of the application to update.
+
+**Request Body:** The Application object containing the updated information. The user field in the request body is ignored; the application remains associated with its original user.
 ```json
 {
-  "id": "string",
-  "companyName": "string",
-  "positionTitle": "string",
-  "applicationDate": "string",
-  "status": "string",
-  "jobDescription": "string",
-  "applicationUrl": "string",
-  "notes": "string",
-  "updatedAt": "string"
+    "company": "string",
+    "jobTitle": "string",
+    "location": "string",
+    "url": "string",
+    "description": "string",
+    "compensation": "string",
+    "status": "string",
+    "applicationDate": "string"
+    // ... other application properties
 }
 ```
 
-### Delete Application
+**Authorization:**
+- If the user has the ADMIN role, can update any application.
+- Otherwise, can only update applications associated with the currently authenticated user.
 
-```http
-DELETE /api/applications/{id}
-```
-
-Delete a job application.
-
-#### Response
-
-- **Success (200 OK)**
+**Response:**
+- **200 OK:** Returns the updated Application object.
+- **401 Unauthorized:** If the user is not authenticated.
+- **403 Forbidden:** If the user is not authorized to update the specified application.
+- **404 Not Found:** If the application with the given ID does not exist.
 ```json
 {
-  "message": "Application deleted successfully"
+    "id": "integer",
+    "company": "string",
+    "jobTitle": "string",
+    "location": "string",
+    "url": "string",
+    "description": "string",
+    "compensation": "string",
+    "status": "string",
+    "applicationDate": "string",
+    "user": {
+        "id": "integer",
+        "username": "string",
+    },
+    // ... other application properties
 }
 ```
+
+### 5. Delete Application
+
+**Endpoint:** `DELETE /{id}`
+
+**Description:** Deletes a job application.
+
+**Path Variable:**
+- `id`: The ID of the application to delete.
+
+**Authorization:**
+- If the user has the ADMIN role, can delete any application.
+- Otherwise, can only delete applications associated with the currently authenticated user.
+
+**Response:**
+- **204 No Content:** Indicates successful deletion.
+- **401 Unauthorized:** If the user is not authenticated.
+- **403 Forbidden:** If the user is not authorized to delete the specified application.
+- **404 Not Found:** If the application with the given ID does not exist.
 
 ### Get Application Statistics
 
