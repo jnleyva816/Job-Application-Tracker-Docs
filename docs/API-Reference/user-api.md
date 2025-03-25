@@ -22,7 +22,7 @@ Authorization: Bearer <your_jwt_token>
 ### Register User
 
 ```http
-POST /api/auth/register
+POST /api/users/register
 ```
 
 Register a new user in the system.
@@ -58,7 +58,7 @@ Register a new user in the system.
 ### Login User
 
 ```http
-POST /api/auth/login
+POST /api/users/login
 ```
 
 Authenticate a user and receive a JWT token.
